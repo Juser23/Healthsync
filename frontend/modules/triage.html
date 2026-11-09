@@ -1,0 +1,104 @@
+﻿<div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; background: #fff;">
+    <div class="card-header d-flex justify-content-between align-items-center" style="padding: 1.5rem 2rem; border-bottom: 1px solid #f1f3f8;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: rgba(32, 201, 151, 0.1); padding: 10px; border-radius: 10px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            </div>
+            <div>
+                <h3 class="card-title" style="font-size: 1.25rem; font-weight:800; color:#181c32; margin: 0;">Centro de Triage y Urgencias</h3>
+                <span class="text-muted" style="font-size: 0.85rem;">Clasificación de prioridad y gestión de sala</span>
+            </div>
+        </div>
+        <ul class="nav nav-pills" id="triageTabs" style="display: flex; gap: 8px; list-style: none; margin: 0; padding: 5px; background: #f4f6f9; border-radius: 12px;">
+            <li><button class="btn btn-primary active" id="btnTabIngreso" onclick="app.switchTriageTab('ingreso')" style="padding: 0.6rem 1.2rem; border-radius: 8px; border: none; font-weight: 600; box-shadow: 0 4px 10px rgba(32,201,151,0.2);">Ingreso de Triage</button></li>
+            <li><button class="btn" id="btnTabEstado" onclick="app.switchTriageTab('estado')" style="padding: 0.6rem 1.2rem; border-radius: 8px; border: none; font-weight: 600; background: transparent; color: #7e8299;">Estado de Urgencias</button></li>
+        </ul>
+    </div>
+    
+    <div class="card-body" style="padding: 2.5rem;">
+        
+        <!-- Tab: Ingreso de Triage -->
+        <div id="triageViewIngreso">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div class="d-flex align-items-center mb-4" style="gap: 15px;">
+                    <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary-color); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(32,201,151,0.3);">1</div>
+                    <h4 style="margin: 0; color: #181c32; font-weight: 700;">Validación de Admisión</h4>
+                </div>
+                
+                <div class="d-flex" style="gap: 15px; margin-bottom: 2.5rem; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); border: 1px solid #eff2f5;">
+                    <div style="flex: 1; position: relative;">
+                        <svg style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a1a5b7; width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <input type="text" id="triageDocInput" class="form-control" placeholder="Número de Documento del Paciente" style="border: none; background: transparent; padding-left: 45px; box-shadow: none;">
+                    </div>
+                    <button class="btn btn-primary" onclick="app.validarPacienteTriage()" style="border-radius: 8px; padding: 0.8rem 2rem;">Validar Sistema</button>
+                </div>
+                
+                <div id="triageFormContainer" class="d-none" style="animation: slideIn 0.4s ease forwards;">
+                    <div class="d-flex align-items-center mb-4" style="gap: 15px;">
+                        <div style="width: 35px; height: 35px; border-radius: 50%; background: #181c32; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem;">2</div>
+                        <h4 style="margin: 0; color: #181c32; font-weight: 700;">Evaluación y Clasificación</h4>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 16px; border: 1px solid #e4e6ef; border-left: 5px solid var(--primary-color);">
+                        <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eff2f5;" id="triagePacienteInfo">--</div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label style="font-weight: 600; margin-bottom: 8px; display: block; color: #3f4254; font-size: 0.9rem;">Motivo de Consulta / Sintomatología Principal</label>
+                                <textarea id="triageMotivo" class="form-control" rows="3" placeholder="Describa brevemente los síntomas del paciente..." style="resize: none;"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label style="font-weight: 600; margin-bottom: 8px; display: block; color: #3f4254; font-size: 0.9rem;">Clasificación de Triage</label>
+                                <select id="triageClasificacion" class="form-control">
+                                    <option value="">Seleccione Nivel de Gravedad...</option>
+                                    <option value="I">Triage I (Reanimación - Rojo)</option>
+                                    <option value="II">Triage II (Emergencia - Naranja)</option>
+                                    <option value="III">Triage III (Urgencia - Amarillo)</option>
+                                    <option value="IV">Triage IV (Prioridad Menor - Verde)</option>
+                                    <option value="V">Triage V (No Urgente - Azul)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label style="font-weight: 600; margin-bottom: 8px; display: block; color: #3f4254; font-size: 0.9rem;">Acción Inmediata a Tomar</label>
+                                <select id="triageAccion" class="form-control">
+                                    <option value="Paso Directo a Reanimación">Paso Directo a Reanimación</option>
+                                    <option value="Llamar a Box de Urgencias">Llamar a Box de Urgencias</option>
+                                    <option value="Sala de Espera (Prioridad)">Sala de Espera (Prioridad)</option>
+                                    <option value="Sala de Espera (General)">Sala de Espera (General)</option>
+                                    <option value="Derivar a Consulta Externa">Derivar a Consulta Externa</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: right; border-top: 1px dashed #e4e6ef; padding-top: 20px; margin-top: 10px;">
+                            <button class="btn btn-modern-glow" style="padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 12px; display: inline-flex; align-items: center; gap: 10px;" onclick="app.guardarTriage()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Guardar Triage Oficial
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Estado de Triage -->
+        <div id="triageViewEstado" class="d-none">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" style="width: 100%;">
+                    <thead style="background: #f4f6f9;">
+                        <tr>
+                            <th style="border-radius: 8px 0 0 8px; padding-left: 20px;">Paciente (Urgencia)</th>
+                            <th>Motivo Sintomatológico</th>
+                            <th>Clasificación Actual</th>
+                            <th style="border-radius: 0 8px 8px 0; text-align: right; padding-right: 20px;">Acción de Triage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="triageTableBody" style="border-top: 10px solid transparent;">
+                        <tr><td colspan="4" class="text-center" style="padding: 3rem; color: #a1a5b7;">Cargando estado de urgencias...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>

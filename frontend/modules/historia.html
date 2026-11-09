@@ -1,0 +1,51 @@
+<div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(145deg, #ffffff, #f8f9fa); border-radius: 16px;">
+    <div class="card-body" style="padding: 2.5rem;">
+        <h3 class="card-title mb-2" style="font-size: 1.5rem; font-weight: 800; color: #181c32;">Consulta de Expediente Clínico</h3>
+        <p class="text-muted mb-4" style="font-size: 1rem;">Ingrese el documento de identidad del paciente para acceder a su historial médico, diagnósticos y trazabilidad.</p>
+        
+        <div style="display: flex; gap: 15px; max-width: 700px; align-items: center; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.04); border: 1px solid #eff2f5;">
+            <div style="flex: 1; position: relative;">
+                <svg style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a1a5b7; width: 22px; height: 22px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" class="form-control" style="border: none; background: transparent; padding-left: 50px; font-size: 1.1rem; box-shadow: none;" id="searchHistoriaDoc" placeholder="Número de Documento (Ej. 1000000702)">
+            </div>
+            <button type="button" class="btn btn-primary" style="padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;" id="btnBuscarHistoria" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Buscar Expediente
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="btnRegistrarNuevoPacienteWrapper" class="card border-0 text-center d-none my-4" style="background: rgba(241, 65, 108, 0.04); border: 1px dashed rgba(241, 65, 108, 0.3) !important; border-radius: 16px;">
+    <div class="card-body py-5">
+        <div style="background: #fff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 5px 15px rgba(241,65,108,0.15);">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--danger-color)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <h4 class="text-dark mb-2" style="font-weight: 700;">Paciente No Encontrado</h4>
+        <p class="text-muted mb-4" style="max-width: 400px; margin: 0 auto;">El número de documento ingresado no coincide con ningún paciente registrado en la base de datos de HealthSync.</p>
+        <button class="btn btn-modern-glow" style="border-radius: 8px; display: inline-flex; align-items: center; gap: 8px;" onclick="app.abrirFormularioPaciente()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            Ir a Admisión de Pacientes
+        </button>
+    </div>
+</div>
+
+<div id="historiaContenido" class="d-none mt-4">
+    <div class="card mb-4 border-0 shadow-sm" style="border-left: 5px solid var(--primary-color); border-radius: 16px;">
+        <div class="card-body row align-items-center" id="pacientePerfil" style="padding: 2rem;">
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+        <div class="card-header border-bottom" style="background: transparent; padding: 1.5rem 2rem;">
+            <h3 class="card-title" style="font-size: 1.25rem; font-weight: 700; color: #181c32; margin: 0; display: flex; align-items: center; gap: 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                Línea de Tiempo Clínica
+            </h3>
+        </div>
+        <div class="card-body" style="padding: 2rem;">
+            <div class="timeline" id="listaHistoriaClinica">
+            </div>
+        </div>
+    </div>
+</div>

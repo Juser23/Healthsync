@@ -1,0 +1,122 @@
+﻿<div class="card border-0 shadow-sm" style="border-radius: 12px; overflow:hidden;">
+    <div class="card-header border-bottom" style="background-color: #ffffff; padding: 1.5rem 2rem;">
+        <h3 class="card-title" style="color: #181c32; font-size: 1.4rem; font-weight: 800; margin: 0;">Programación Médica</h3>
+        <p class="text-muted" style="margin: 5px 0 0 0; font-size: 0.9rem;">Asignación de turnos y espacios clínicos.</p>
+    </div>
+    <div class="card-body" style="padding: 2.5rem;">
+        <form id="agendarForm" novalidate>
+            
+            <div style="background-color: #fafafa; border: 1px solid #e4e6ef; border-radius: 10px; padding: 2rem; margin-bottom: 2rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem; text-transform: uppercase;">1. Identificación y Filtro Clínico</h4>
+                
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-bolder text-dark" style="font-size: 0.85rem; text-transform:uppercase;">Documento Identidad</label>
+                        <div class="d-flex gap-2" style="gap: 10px; max-width: 400px;">
+                            <input type="text" class="form-control" style="background-color: #fff; border-color: #d8dbe5;" id="searchPacienteDoc" placeholder="Ej. 1045612398" required>
+                            <button type="button" class="btn btn-secondary" id="btnBuscarPacienteAgenda" style="padding: 0.5rem 1.5rem; font-weight: 600; letter-spacing: 0.5px;">Validar</button>
+                        </div>
+                        <small class="text-muted d-block mt-2" id="pacienteAgendaEncontrado" style="font-size: 0.8rem;"></small>
+                    </div>
+
+                    <!-- PROFILE CARD CONTAINER -->
+                    <div class="col-md-12 mb-4 d-none" id="pacienteProfileCard">
+                        <div style="background: #eef3f8; border-left: 4px solid var(--primary-color); padding: 15px 20px; border-radius: 8px; display: flex; align-items: center; gap: 20px;">
+                            <div style="background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">
+                                <span id="profileInitials">PT</span>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; font-weight: 700; color: #181c32; font-size: 1.1rem;" id="profileName">Nombre del Paciente</h5>
+                                <div style="display: flex; gap: 15px; margin-top: 5px; font-size: 0.85rem; color: #5e6278;">
+                                    <span><strong>Doc:</strong> <span id="profileDoc">...</span></span>
+                                    <span><strong>Sede Ppal:</strong> <span id="profileCity">...</span></span>
+                                    <span><strong>EPS:</strong> <span id="profileEps">...</span></span>
+                                    <span style="color: var(--success-color); font-weight: bold;">. ACTIVO</span></div></div></div></div>
+</div> <!-- Cierra el primer row -->
+
+<div class="row mt-2 d-none" id="historialRapidoAgendaRow">
+    <div class="col-md-12 mb-4" id="historialRapidoAgenda">
+    </div>
+</div>
+
+<div class="row"> <!-- Abre el segundo row para Especialidad -->
+                    <div class="col-md-4 mb-4"><label class="form-label fw-bolder text-dark" style="font-size: 0.85rem; text-transform:uppercase;">Especialidad Requerida</label>
+                        <select class="form-control modern-select" style="background-color: #fff; border-color: #d8dbe5;" id="selectEspecialidad" disabled required>
+                            <option value="">Seleccione especialidad</option>
+                            <option value="890201">Medicina General Integral</option>
+                            <option value="890202">Cardiología Intervencionista</option>
+                            <option value="890203">Pediatría Especializada</option>
+                            <option value="890204">Ortopedia y Traumatología</option>
+                            <option value="890205">Psicología y Salud Mental</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-4">
+                        <label class="form-label fw-bolder text-dark" style="font-size: 0.85rem; text-transform:uppercase;">Centro de Atención (Sede)</label>
+                        <select class="form-control modern-select" style="background-color: #f8f9fa; border-color: #d8dbe5;" id="selectSedeAgenda" disabled required>
+                            <option value="">Esperando Validación de Identidad...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background-color: #fafafa; border: 1px solid #e4e6ef; border-radius: 10px; padding: 2rem; margin-bottom: 2rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem; text-transform: uppercase;">2. Asignación de Espacio con Profesional</h4>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bolder text-dark" style="font-size: 0.85rem; text-transform:uppercase;">Profesional Disponible</label>
+                        <select class="form-control modern-select" style="background-color: #fff; border-color: #d8dbe5;" id="selectMédico" disabled required>
+                            <option value="">Esperando especialidad...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bolder text-dark" style="font-size: 0.85rem; text-transform:uppercase;">Turno Seleccionado</label>
+                        <input type="text" class="form-control" style="background-color: #f1f3f8; border-color: #d8dbe5;" id="inputFechaCita" readonly required placeholder="Seleccione un turno en el calendario debajo...">
+                    </div>
+
+                    <!-- CALENDAR WRAPPER -->
+                    <div class="col-12 mb-4 d-none" id="calendarWrapper">
+                        <div class="calendar-header d-flex justify-content-between align-items-center mb-3" style="background:var(--primary-color); color:white; padding:10px 15px; border-radius:8px;">
+                            <button type="button" class="btn" style="background:rgba(255,255,255,0.2); color:white; padding:0.3rem 1rem;" id="btnPrevWeek">❮ Anterior</button>
+                            <strong id="labelWeekTitle" style="font-size:1.1rem; letter-spacing:0.5px;">Semana del -- al --</strong>
+                            <button type="button" class="btn" style="background:rgba(255,255,255,0.2); color:white; padding:0.3rem 1rem;" id="btnNextWeek">Siguiente ❯</button>
+                        </div>
+                        <div class="table-responsive" style="border: 1px solid #e4e6ef; border-radius: 8px;">
+                            <table class="table calendar-grid text-center m-0" style="table-layout: fixed;">
+                                <thead style="background:#f8f9fa;">
+                                    <tr>
+                                        <th style="width:70px; border-right:1px solid #e4e6ef; vertical-align:middle;">Hora</th>
+                                        <th style="border-right:1px solid #e4e6ef;">Lun <br><small id="date-1" style="font-weight:400;"></small></th>
+                                        <th style="border-right:1px solid #e4e6ef;">Mar <br><small id="date-2" style="font-weight:400;"></small></th>
+                                        <th style="border-right:1px solid #e4e6ef;">Mié <br><small id="date-3" style="font-weight:400;"></small></th>
+                                        <th style="border-right:1px solid #e4e6ef;">Jue <br><small id="date-4" style="font-weight:400;"></small></th>
+                                        <th style="border-right:1px solid #e4e6ef;">Vie <br><small id="date-5" style="font-weight:400;"></small></th>
+                                        <th style="border-right:1px solid #e4e6ef;">Sáb <br><small id="date-6" style="font-weight:400;"></small></th>
+                                        <th>Dom <br><small id="date-7" style="font-weight:400;"></small></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendarBody">
+                                    <!-- Slots generados por JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bolder text-dark" style="font-size: 0.85rem; text-transform:uppercase;">Observación Clínica Principal</label>
+                        <textarea class="form-control" style="background-color: #fff; border-color: #d8dbe5;" id="inputMotivo" rows="4" required placeholder="Redacte de forma resumida el motivo de la consulta u observación..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-right mt-4" style="text-align: right; margin-top: 2rem;">
+                <button type="submit" class="btn btn-modern-glow" style="min-width: 250px; border-radius: 6px; font-weight: 700; font-size: 1.05rem;" id="btnGuardarCita">
+                    Confirmar y Agendar
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+
+
